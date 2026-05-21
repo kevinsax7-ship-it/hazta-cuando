@@ -2,564 +2,570 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>¡¿Hazta Cuándo?! — Modo Ranked</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>¡¿Hazta Cuándo?!</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --purple-900: #0D0B1A;
-    --purple-800: #16122E;
-    --purple-700: #26215C;
-    --purple-600: #3C3489;
-    --purple-500: #534AB7;
-    --purple-400: #7F77DD;
-    --purple-300: #AFA9EC;
-    --purple-200: #CECBF6;
-    --purple-100: #EEEDFE;
+    --bg: #09071A;
+    --bg2: #13103A;
+    --bg3: #1E1A52;
+    --purple: #4C3FD4;
+    --purple2: #7B6FEE;
+    --purple3: #AFA9EC;
     --gold: #C8A94A;
-    --gold-light: #F0D080;
-    --silver: #A8B4C8;
-    --accent: #8B5CF6;
-    --danger: #E24B4A;
-    --success: #1D9E75;
+    --goldf: #F0D080;
+    --red: #E24B4A;
+    --green: #1DBF87;
+    --border: rgba(76,63,212,0.4);
+    --text: #EEEDFE;
+    --muted: #8B85CC;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-  body {
-    background: var(--purple-900);
-    color: var(--purple-100);
-    font-family: 'Inter', sans-serif;
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    overscroll-behavior: none;
   }
 
-  /* Fondo con patrón hexagonal sutil */
+  /* Fondo animado */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: 
-      radial-gradient(ellipse at 20% 50%, rgba(83,74,183,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(127,119,221,0.1) 0%, transparent 50%);
+    background:
+      radial-gradient(ellipse at 15% 40%, rgba(76,63,212,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 15%, rgba(123,111,238,0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 90%, rgba(200,169,74,0.07) 0%, transparent 40%);
     pointer-events: none;
     z-index: 0;
   }
 
-  .app { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 16px; }
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+  }
 
-  /* HEADER */
+  /* ── HEADER ── */
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 20px;
-    background: rgba(38,33,92,0.6);
-    border: 1px solid rgba(127,119,221,0.3);
-    border-radius: 12px;
-    margin-bottom: 16px;
-    backdrop-filter: blur(8px);
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(9,7,26,0.9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(10px);
   }
 
   .logo {
     font-family: 'Orbitron', monospace;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 900;
-    color: var(--purple-200);
-    letter-spacing: 0.05em;
+    color: var(--purple3);
+    letter-spacing: 0.03em;
+    line-height: 1.2;
   }
+  .logo em { color: var(--gold); font-style: normal; }
 
-  .logo span { color: var(--gold); }
+  .header-right { display: flex; align-items: center; gap: 10px; }
 
-  .rank-badge {
+  .streak {
     display: flex;
     align-items: center;
-    gap: 10px;
-  }
-
-  .rank-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-  }
-
-  .rank-info { text-align: right; }
-  .rank-name { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; color: var(--gold); }
-  .rank-pts { font-size: 11px; color: var(--purple-300); }
-
-  .streak-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(200,169,74,0.15);
-    border: 1px solid rgba(200,169,74,0.4);
-    padding: 6px 12px;
+    gap: 4px;
+    background: rgba(200,169,74,0.12);
+    border: 1px solid rgba(200,169,74,0.35);
+    padding: 4px 10px;
     border-radius: 20px;
-    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
     font-weight: 700;
-    font-size: 14px;
     color: var(--gold);
   }
 
-  /* GRID PRINCIPAL */
-  .main-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
+  .rank-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(76,63,212,0.2);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .rank-chip-icon { font-size: 16px; }
+  .rank-chip-name { font-size: 11px; font-weight: 700; color: var(--gold); }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 53px;
+    z-index: 9;
   }
 
-  @media (max-width: 600px) {
-    .main-grid { grid-template-columns: 1fr; }
+  .tab {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
   }
 
-  /* PANEL CARD */
-  .panel {
-    background: rgba(22,18,46,0.8);
-    border: 1px solid rgba(83,74,183,0.4);
+  .tab.active {
+    color: var(--purple2);
+    border-bottom-color: var(--purple2);
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; padding: 16px; }
+  .screen.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: rgba(19,16,58,0.7);
+    border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 20px;
-    backdrop-filter: blur(8px);
+    padding: 18px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(6px);
   }
 
-  .panel-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
+  .card-title {
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.15em;
-    color: var(--purple-400);
     text-transform: uppercase;
-    margin-bottom: 16px;
+    color: var(--purple2);
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
   }
-
-  .panel-title::before {
+  .card-title::before {
     content: '';
-    width: 3px;
-    height: 14px;
-    background: var(--purple-500);
+    width: 3px; height: 12px;
+    background: var(--purple);
     border-radius: 2px;
-    display: inline-block;
   }
 
-  /* METRÓNOMO */
-  .bpm-display {
+  /* ── METRÓNOMO ── */
+  .bpm-hero {
     text-align: center;
-    margin: 8px 0 16px;
+    padding: 8px 0 4px;
   }
 
   .bpm-number {
     font-family: 'Orbitron', monospace;
-    font-size: 64px;
+    font-size: 80px;
     font-weight: 900;
-    color: var(--purple-100);
     line-height: 1;
-    text-shadow: 0 0 30px rgba(127,119,221,0.5);
+    color: var(--text);
+    text-shadow: 0 0 40px rgba(123,111,238,0.6);
+    letter-spacing: -2px;
   }
 
-  .bpm-label {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 12px;
-    color: var(--purple-400);
+  .bpm-unit {
+    font-size: 13px;
+    color: var(--muted);
     letter-spacing: 0.2em;
-    text-transform: uppercase;
+    margin-top: 2px;
   }
 
-  .pendulum-wrap {
+  /* Péndulo */
+  .pendulum-area {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70px;
-    margin: 8px 0;
+    height: 56px;
+    margin: 12px 0;
   }
 
-  .pendulum-track {
-    width: 120px;
-    height: 4px;
-    background: rgba(83,74,183,0.3);
+  .pend-track {
+    width: 200px;
+    height: 3px;
+    background: rgba(76,63,212,0.25);
     border-radius: 2px;
     position: relative;
-    overflow: visible;
   }
 
-  .pendulum-dot {
-    width: 20px;
-    height: 20px;
-    background: var(--purple-400);
+  .pend-ball {
+    width: 22px; height: 22px;
     border-radius: 50%;
+    background: var(--purple2);
     position: absolute;
-    top: -8px;
-    left: 0;
-    box-shadow: 0 0 12px rgba(127,119,221,0.8);
-    transition: background 0.1s;
+    top: -10px; left: 0;
+    box-shadow: 0 0 14px rgba(123,111,238,0.8);
+    transition: background 0.08s;
   }
 
-  .pendulum-dot.beat {
-    background: var(--gold);
-    box-shadow: 0 0 20px rgba(200,169,74,0.9);
-  }
+  .pend-ball.on-beat { background: var(--gold); box-shadow: 0 0 20px rgba(200,169,74,0.9); }
+  .pend-ball.playing { animation: swing linear infinite; }
+  @keyframes swing { 0%{left:0} 50%{left:calc(100% - 22px)} 100%{left:0} }
 
-  .pendulum-dot.accent {
-    background: var(--gold-light);
-    box-shadow: 0 0 24px rgba(240,208,128,1);
-    transform: scale(1.3);
-  }
-
-  @keyframes swing {
-    0% { left: 0; }
-    50% { left: calc(100% - 20px); }
-    100% { left: 0; }
-  }
-
-  .pendulum-dot.playing {
-    animation: swing linear infinite;
-  }
-
-  .beat-lights {
+  /* Luces de tiempo */
+  .beat-row {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin: 10px 0;
+    gap: 10px;
+    margin-bottom: 16px;
   }
 
-  .beat-light {
-    width: 12px;
-    height: 12px;
+  .beat-dot {
+    width: 14px; height: 14px;
     border-radius: 50%;
-    background: rgba(83,74,183,0.3);
-    border: 1px solid rgba(83,74,183,0.5);
+    background: rgba(76,63,212,0.25);
+    border: 1px solid rgba(76,63,212,0.4);
     transition: all 0.05s;
   }
+  .beat-dot.lit { background: var(--purple2); box-shadow: 0 0 8px rgba(123,111,238,0.7); }
+  .beat-dot.lit-accent { background: var(--gold); box-shadow: 0 0 14px rgba(200,169,74,0.9); transform: scale(1.25); }
 
-  .beat-light.active {
-    background: var(--gold);
-    box-shadow: 0 0 10px rgba(200,169,74,0.8);
-    border-color: var(--gold-light);
+  /* Slider BPM */
+  .slider-wrap { margin-bottom: 16px; }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
   }
 
-  .beat-light.accent-light {
-    background: var(--gold-light);
-    box-shadow: 0 0 14px rgba(240,208,128,1);
-    transform: scale(1.3);
-  }
-
-  /* CONTROLES */
-  .bpm-slider {
+  input[type=range] {
     -webkit-appearance: none;
     width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(83,74,183,0.4);
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(76,63,212,0.3);
     outline: none;
-    margin: 8px 0 16px;
   }
-
-  .bpm-slider::-webkit-slider-thumb {
+  input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 22px; height: 22px;
     border-radius: 50%;
-    background: var(--purple-400);
+    background: var(--purple2);
     cursor: pointer;
-    box-shadow: 0 0 8px rgba(127,119,221,0.6);
+    box-shadow: 0 0 10px rgba(123,111,238,0.7);
   }
 
-  .btn-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
+  /* Botones principales */
+  .btn-row { display: flex; gap: 10px; margin-bottom: 12px; }
 
   .btn {
     flex: 1;
-    padding: 10px 8px;
-    border-radius: 8px;
-    border: 1px solid rgba(83,74,183,0.5);
-    background: rgba(83,74,183,0.2);
-    color: var(--purple-200);
+    padding: 13px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(76,63,212,0.18);
+    color: var(--text);
     font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
     font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     cursor: pointer;
     transition: all 0.15s;
     text-transform: uppercase;
+    touch-action: manipulation;
   }
+  .btn:active { transform: scale(0.95); opacity: 0.85; }
+  .btn-play { background: var(--purple); border-color: var(--purple2); font-size: 18px; }
+  .btn-play.stop { background: rgba(226,75,74,0.25); border-color: var(--red); color: var(--red); }
+  .btn-tap { background: rgba(200,169,74,0.12); border-color: rgba(200,169,74,0.4); color: var(--gold); }
 
-  .btn:hover { background: rgba(83,74,183,0.4); border-color: var(--purple-400); }
-  .btn:active { transform: scale(0.97); }
-
-  .btn-primary {
-    background: var(--purple-600);
-    border-color: var(--purple-400);
-    color: var(--purple-100);
-  }
-
-  .btn-primary:hover { background: var(--purple-500); }
-
-  .btn-play {
-    background: var(--purple-500);
-    border-color: var(--purple-300);
-    font-size: 16px;
-    padding: 12px;
-  }
-
-  .btn-play.playing {
-    background: rgba(226,75,74,0.3);
-    border-color: var(--danger);
-    color: var(--danger);
-  }
-
-  .btn-tap {
-    background: rgba(200,169,74,0.15);
-    border-color: rgba(200,169,74,0.5);
-    color: var(--gold);
-  }
-
-  .btn-tap:hover { background: rgba(200,169,74,0.25); border-color: var(--gold); }
-
-  /* SUBDIVISION */
-  .sub-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 12px;
-  }
-
+  /* Subdivisiones */
+  .sub-row { display: flex; gap: 6px; margin-bottom: 14px; }
   .sub-btn {
     flex: 1;
-    padding: 7px 4px;
-    border-radius: 6px;
-    border: 1px solid rgba(83,74,183,0.4);
-    background: rgba(22,18,46,0.5);
-    color: var(--purple-300);
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(76,63,212,0.3);
+    background: rgba(9,7,26,0.5);
+    color: var(--muted);
     font-family: 'Rajdhani', sans-serif;
     font-size: 11px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s;
     text-align: center;
-    letter-spacing: 0.05em;
+    transition: all 0.15s;
+    touch-action: manipulation;
   }
+  .sub-btn.active { background: rgba(76,63,212,0.35); border-color: var(--purple2); color: var(--text); }
 
-  .sub-btn.active {
-    background: rgba(83,74,183,0.4);
-    border-color: var(--purple-400);
-    color: var(--purple-100);
-  }
-
-  /* RITMOS */
-  .rhythm-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-
-  .rhythm-btn {
-    padding: 8px 6px;
-    border-radius: 8px;
-    border: 1px solid rgba(83,74,183,0.3);
-    background: rgba(22,18,46,0.6);
-    color: var(--purple-300);
+  /* Ritmos */
+  .rhythm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rbtn {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(76,63,212,0.3);
+    background: rgba(9,7,26,0.5);
+    color: var(--muted);
     font-family: 'Rajdhani', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s;
     text-align: left;
-    padding-left: 10px;
+    transition: all 0.15s;
+    touch-action: manipulation;
   }
+  .rbtn span { display: block; font-size: 10px; color: rgba(139,133,204,0.7); margin-top: 1px; }
+  .rbtn:active { transform: scale(0.97); }
+  .rbtn.active { border-color: var(--gold); background: rgba(200,169,74,0.1); color: var(--gold); }
+  .rbtn.active span { color: rgba(200,169,74,0.7); }
 
-  .rhythm-btn .r-bpm { font-size: 10px; color: var(--purple-400); display: block; }
-  .rhythm-btn:hover { border-color: var(--purple-400); background: rgba(83,74,183,0.2); color: var(--purple-100); }
-  .rhythm-btn.active { border-color: var(--gold); background: rgba(200,169,74,0.1); color: var(--gold); }
-  .rhythm-btn.active .r-bpm { color: var(--gold-light); }
+  /* ── AFINADOR ── */
+  .inst-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+  }
+  .inst-scroll::-webkit-scrollbar { display: none; }
 
-  /* AFINADOR */
-  .tuner-note {
+  .inst-btn {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(76,63,212,0.35);
+    background: rgba(9,7,26,0.6);
+    color: var(--muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    touch-action: manipulation;
+  }
+  .inst-btn.active { border-color: var(--purple2); background: rgba(76,63,212,0.3); color: var(--text); }
+
+  .note-hero {
     text-align: center;
-    margin: 8px 0;
+    margin: 8px 0 16px;
   }
 
   .note-big {
     font-family: 'Orbitron', monospace;
-    font-size: 56px;
+    font-size: 72px;
     font-weight: 900;
     line-height: 1;
+    color: var(--muted);
     transition: color 0.2s;
   }
 
-  .note-freq { font-size: 12px; color: var(--purple-400); margin-top: 4px; }
+  .note-hz { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
-  .tuner-meter {
+  .tuner-bar {
     position: relative;
-    height: 24px;
-    background: rgba(83,74,183,0.2);
-    border-radius: 12px;
-    border: 1px solid rgba(83,74,183,0.4);
-    margin: 12px 0;
+    height: 28px;
+    background: rgba(76,63,212,0.15);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
     overflow: hidden;
   }
 
-  .tuner-center {
+  .tuner-center-line {
     position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
+    left: 50%; top: 0; bottom: 0;
     width: 2px;
-    background: rgba(127,119,221,0.5);
+    background: rgba(123,111,238,0.4);
     transform: translateX(-50%);
   }
 
   .tuner-needle {
     position: absolute;
-    top: 4px;
-    bottom: 4px;
-    width: 4px;
-    border-radius: 2px;
-    background: var(--purple-300);
+    top: 5px; bottom: 5px;
+    width: 5px;
+    border-radius: 3px;
+    background: var(--purple2);
     left: 50%;
     transform: translateX(-50%);
-    transition: left 0.15s ease, background 0.2s;
+    transition: left 0.12s ease, background 0.2s;
+    box-shadow: 0 0 8px currentColor;
   }
 
-  .tuner-labels {
+  .tuner-ends {
     display: flex;
     justify-content: space-between;
     font-size: 10px;
-    color: var(--purple-400);
-    margin-bottom: 12px;
-    font-family: 'Rajdhani', sans-serif;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding: 0 4px;
   }
 
   .tuner-status {
     text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+  .s-idle { background: rgba(76,63,212,0.12); color: var(--muted); border: 1px solid var(--border); }
+  .s-in { background: rgba(29,191,135,0.12); color: var(--green); border: 1px solid rgba(29,191,135,0.3); }
+  .s-low, .s-high { background: rgba(226,75,74,0.12); color: var(--red); border: 1px solid rgba(226,75,74,0.3); }
+
+  .btn-mic {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--purple2);
+    background: var(--purple);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+    touch-action: manipulation;
+  }
+  .btn-mic:active { transform: scale(0.97); }
+  .btn-mic.on { background: rgba(226,75,74,0.2); border-color: var(--red); color: var(--red); }
+
+  /* ── SESIÓN ── */
+  .timer-big {
+    font-family: 'Orbitron', monospace;
+    font-size: 52px;
+    font-weight: 900;
+    text-align: center;
+    color: var(--text);
+    letter-spacing: 2px;
+    margin: 8px 0 16px;
+    text-shadow: 0 0 30px rgba(123,111,238,0.4);
+  }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .stat {
+    background: rgba(76,63,212,0.12);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-n { font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 700; color: var(--text); }
+  .stat-l { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+
+  .btn-end {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid var(--gold);
+    background: rgba(200,169,74,0.12);
+    color: var(--gold);
     font-family: 'Rajdhani', sans-serif;
     font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.1em;
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-  }
-
-  .status-low { background: rgba(226,75,74,0.15); color: var(--danger); border: 1px solid rgba(226,75,74,0.3); }
-  .status-high { background: rgba(226,75,74,0.15); color: var(--danger); border: 1px solid rgba(226,75,74,0.3); }
-  .status-in { background: rgba(29,158,117,0.15); color: var(--success); border: 1px solid rgba(29,158,117,0.3); }
-  .status-idle { background: rgba(83,74,183,0.15); color: var(--purple-400); border: 1px solid rgba(83,74,183,0.3); }
-
-  .instrument-row {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-  }
-
-  .inst-btn {
-    padding: 5px 10px;
-    border-radius: 6px;
-    border: 1px solid rgba(83,74,183,0.3);
-    background: rgba(22,18,46,0.5);
-    color: var(--purple-300);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s;
+    touch-action: manipulation;
+    text-transform: uppercase;
   }
+  .btn-end:active { transform: scale(0.97); }
 
-  .inst-btn.active { border-color: var(--purple-400); background: rgba(83,74,183,0.3); color: var(--purple-100); }
-
-  /* RANGOS */
-  .ranks-panel { grid-column: 1 / -1; }
-
-  .ranks-track {
+  /* ── RANGOS ── */
+  .ranks-scroll {
     display: flex;
-    gap: 6px;
-    align-items: center;
+    gap: 8px;
     overflow-x: auto;
     padding-bottom: 8px;
+    scrollbar-width: none;
+    margin-bottom: 16px;
   }
+  .ranks-scroll::-webkit-scrollbar { display: none; }
 
-  .rank-item {
+  .rank-card {
     flex-shrink: 0;
+    width: 72px;
     text-align: center;
-    padding: 10px 12px;
+    padding: 10px 6px;
     border-radius: 10px;
-    border: 1px solid rgba(83,74,183,0.3);
-    background: rgba(22,18,46,0.5);
-    min-width: 80px;
-    opacity: 0.5;
+    border: 1px solid rgba(76,63,212,0.25);
+    background: rgba(9,7,26,0.5);
+    opacity: 0.4;
     transition: all 0.2s;
   }
+  .rank-card.done { opacity: 0.7; border-color: rgba(76,63,212,0.5); }
+  .rank-card.now { opacity: 1; border-color: var(--gold); background: rgba(200,169,74,0.08); box-shadow: 0 0 16px rgba(200,169,74,0.15); }
 
-  .rank-item.achieved { opacity: 1; border-color: var(--purple-400); background: rgba(83,74,183,0.2); }
-  .rank-item.current { border-color: var(--gold); background: rgba(200,169,74,0.1); opacity: 1; box-shadow: 0 0 12px rgba(200,169,74,0.2); }
+  .rank-card-icon { font-size: 24px; margin-bottom: 4px; }
+  .rank-card-name { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; line-height: 1.3; }
+  .rank-card.now .rank-card-name { color: var(--gold); }
 
-  .rank-item-icon { font-size: 22px; margin-bottom: 4px; }
-  .rank-item-name { font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700; color: var(--purple-300); text-transform: uppercase; }
-  .rank-item.current .rank-item-name { color: var(--gold); }
+  .xp-section { margin-top: 4px; }
+  .xp-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+  .xp-track { height: 7px; background: rgba(76,63,212,0.2); border-radius: 4px; overflow: hidden; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, var(--purple), var(--gold)); border-radius: 4px; transition: width 0.6s ease; width: 35%; }
 
-  .xp-bar-wrap {
-    margin-top: 10px;
-  }
-
-  .xp-bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--purple-400); margin-bottom: 4px; font-family: 'Rajdhani', sans-serif; }
-  .xp-bar { height: 6px; background: rgba(83,74,183,0.3); border-radius: 3px; overflow: hidden; }
-  .xp-fill { height: 100%; width: 35%; background: linear-gradient(90deg, var(--purple-500), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
-
-  /* TIMER */
-  .timer-display {
-    font-family: 'Orbitron', monospace;
-    font-size: 32px;
-    font-weight: 700;
-    text-align: center;
-    color: var(--purple-200);
-    margin: 8px 0;
-  }
-
-  .session-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 10px;
-  }
-
-  .stat-box {
-    background: rgba(83,74,183,0.15);
-    border: 1px solid rgba(83,74,183,0.3);
-    border-radius: 8px;
-    padding: 8px 10px;
-    text-align: center;
-  }
-
-  .stat-num { font-family: 'Orbitron', monospace; font-size: 18px; font-weight: 700; color: var(--purple-200); }
-  .stat-lbl { font-size: 10px; color: var(--purple-400); font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; }
-
-  /* NOTIF */
+  /* ── NOTIF ── */
   .notif {
     position: fixed;
-    top: 20px;
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(200,169,74,0.9);
+    background: rgba(200,169,74,0.95);
     color: #1A1200;
     padding: 10px 20px;
     border-radius: 20px;
-    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
     font-weight: 700;
-    font-size: 14px;
     z-index: 999;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
     white-space: nowrap;
+    max-width: 90vw;
+    text-align: center;
   }
+
+  /* ── NAV BOTTOM ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    background: rgba(9,7,26,0.97);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    z-index: 20;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 10px 0 8px;
+    text-align: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: all 0.15s;
+  }
+
+  .nav-btn-icon { font-size: 22px; display: block; }
+  .nav-btn-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+  .nav-btn.active .nav-btn-label { color: var(--purple2); }
+  .nav-btn.active .nav-btn-icon { filter: drop-shadow(0 0 4px rgba(123,111,238,0.8)); }
 </style>
 </head>
 <body>
@@ -568,543 +574,510 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="logo">¡¿<span>H</span>azta <span>C</span>uándo?!</div>
-    <div class="streak-pill">🔥 <span id="streakCount">1</span> día</div>
-    <div class="rank-badge">
-      <div class="rank-info">
-        <div class="rank-name" id="rankName">ORO III</div>
-        <div class="rank-pts" id="rankPts">847 / 1200 XP</div>
+    <div class="logo">¡¿<em>H</em>azta<br><em>C</em>uándo?!</div>
+    <div class="header-right">
+      <div class="streak">🔥 <span id="streakN">1</span></div>
+      <div class="rank-chip">
+        <span class="rank-chip-icon" id="hIcon">🏅</span>
+        <span class="rank-chip-name" id="hRank">Oro III</span>
       </div>
-      <div class="rank-icon" id="rankIcon">🏅</div>
     </div>
   </div>
 
-  <!-- GRID -->
-  <div class="main-grid">
+  <!-- SCREENS -->
 
-    <!-- METRÓNOMO -->
-    <div class="panel">
-      <div class="panel-title">Metrónomo</div>
+  <!-- METRÓNOMO -->
+  <div class="screen active" id="s-metro">
 
-      <div class="bpm-display">
-        <div class="bpm-number" id="bpmDisplay">120</div>
-        <div class="bpm-label">BPM · <span id="rhythmName">Libre</span></div>
+    <div class="card">
+      <div class="card-title">Metrónomo</div>
+
+      <div class="bpm-hero">
+        <div class="bpm-number" id="bpmN">120</div>
+        <div class="bpm-unit">BPM · <span id="rName">Libre</span></div>
       </div>
 
-      <div class="pendulum-wrap">
-        <div class="pendulum-track">
-          <div class="pendulum-dot" id="pendulumDot"></div>
+      <div class="pendulum-area">
+        <div class="pend-track">
+          <div class="pend-ball" id="pBall"></div>
         </div>
       </div>
 
-      <div class="beat-lights" id="beatLights"></div>
+      <div class="beat-row" id="beatRow"></div>
 
-      <input type="range" class="bpm-slider" id="bpmSlider" min="40" max="240" value="120">
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>40</span><span id="bpmSliderVal">120 BPM</span><span>240</span></div>
+        <input type="range" id="bpmSlider" min="40" max="240" value="120">
+      </div>
 
       <div class="btn-row">
-        <button class="btn btn-play" id="playBtn" onclick="toggleMetronome()">▶ PLAY</button>
-        <button class="btn btn-tap" onclick="tapTempo()">TAP</button>
+        <button class="btn btn-play" id="playBtn" onclick="toggleMetro()">▶</button>
+        <button class="btn btn-tap" onclick="tap()">TAP</button>
       </div>
 
       <div class="sub-row">
-        <button class="sub-btn active" onclick="setSub(1, this)">♩ 1/4</button>
-        <button class="sub-btn" onclick="setSub(2, this)">♪ 1/8</button>
-        <button class="sub-btn" onclick="setSub(3, this)">♪3 Tresillo</button>
+        <button class="sub-btn active" onclick="setSub(1,this)">♩ 1/4</button>
+        <button class="sub-btn" onclick="setSub(2,this)">♪ 1/8</button>
+        <button class="sub-btn" onclick="setSub(3,this)">♪³ Tresillo</button>
       </div>
+    </div>
 
-      <div class="panel-title" style="margin-top:8px;">Banco de Ritmos</div>
+    <div class="card">
+      <div class="card-title">Banco de Ritmos</div>
       <div class="rhythm-grid" id="rhythmGrid"></div>
     </div>
 
-    <!-- AFINADOR -->
-    <div class="panel">
-      <div class="panel-title">Afinador</div>
+  </div>
 
-      <div class="instrument-row" id="instRow"></div>
+  <!-- AFINADOR -->
+  <div class="screen" id="s-tune">
 
-      <div class="tuner-note">
-        <div class="note-big" id="noteDisplay" style="color: var(--purple-400);">—</div>
-        <div class="note-freq" id="freqDisplay">Activa el micrófono</div>
-      </div>
-
-      <div class="tuner-meter">
-        <div class="tuner-center"></div>
-        <div class="tuner-needle" id="tunerNeedle"></div>
-      </div>
-      <div class="tuner-labels">
-        <span>♭ Bajo</span>
-        <span>Afinado</span>
-        <span>Alto ♯</span>
-      </div>
-
-      <div class="tuner-status status-idle" id="tunerStatus">Micrófono inactivo</div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="micBtn" onclick="toggleTuner()">🎙 ACTIVAR MIC</button>
-      </div>
-
-      <div class="panel-title" style="margin-top:8px;">Sesión de hoy</div>
-      <div class="timer-display" id="timerDisplay">00:00</div>
-      <div class="session-stats">
-        <div class="stat-box">
-          <div class="stat-num" id="xpEarned">0</div>
-          <div class="stat-lbl">XP ganados</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="minPracticed">0</div>
-          <div class="stat-lbl">Minutos</div>
-        </div>
-      </div>
-      <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="endSession()">⚔ TERMINAR SESIÓN</button>
+    <div class="card">
+      <div class="card-title">Instrumento</div>
+      <div class="inst-scroll" id="instRow"></div>
     </div>
 
-    <!-- RANGOS -->
-    <div class="panel ranks-panel">
-      <div class="panel-title">Rango · Progresión</div>
-      <div class="ranks-track" id="ranksTrack"></div>
-      <div class="xp-bar-wrap">
-        <div class="xp-bar-labels">
-          <span>Oro III</span>
-          <span id="xpLabel">847 / 1200 XP</span>
-          <span>Oro II</span>
+    <div class="card">
+      <div class="card-title">Afinador</div>
+
+      <div class="note-hero">
+        <div class="note-big" id="noteD">—</div>
+        <div class="note-hz" id="hzD">Activa el micrófono</div>
+      </div>
+
+      <div class="tuner-bar">
+        <div class="tuner-center-line"></div>
+        <div class="tuner-needle" id="needle"></div>
+      </div>
+      <div class="tuner-ends"><span>♭ Bajo</span><span>● Afinado</span><span>Alto ♯</span></div>
+
+      <div class="tuner-status s-idle" id="tStatus">Micrófono inactivo</div>
+
+      <button class="btn-mic" id="micBtn" onclick="toggleTuner()">🎙 ACTIVAR MICRÓFONO</button>
+    </div>
+
+  </div>
+
+  <!-- SESIÓN -->
+  <div class="screen" id="s-session">
+
+    <div class="card">
+      <div class="card-title">Tiempo de sesión</div>
+      <div class="timer-big" id="timerD">00:00</div>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-n" id="xpD">0</div><div class="stat-l">XP ganados</div></div>
+        <div class="stat"><div class="stat-n" id="minD">0</div><div class="stat-l">Minutos</div></div>
+      </div>
+      <button class="btn-end" onclick="endSession()">⚔ Terminar sesión</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Progresión de Rango</div>
+      <div class="ranks-scroll" id="ranksRow"></div>
+      <div class="xp-section">
+        <div class="xp-labels">
+          <span id="xpCurRank">Oro III</span>
+          <span id="xpProgress">847 / 1200 XP</span>
+          <span id="xpNextRank">Oro II</span>
         </div>
-        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+        <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
       </div>
     </div>
 
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-btn active" id="nav-metro" onclick="goTo('metro')">
+    <span class="nav-btn-icon">🥁</span>
+    <div class="nav-btn-label">Metrónomo</div>
+  </div>
+  <div class="nav-btn" id="nav-tune" onclick="goTo('tune')">
+    <span class="nav-btn-icon">🎵</span>
+    <div class="nav-btn-label">Afinador</div>
+  </div>
+  <div class="nav-btn" id="nav-session" onclick="goTo('session')">
+    <span class="nav-btn-icon">⚔</span>
+    <div class="nav-btn-label">Sesión</div>
   </div>
 </div>
 
 <div class="notif" id="notif"></div>
 
 <script>
-// ===================== DATOS =====================
+// ── DATOS ──
 const RANKS = [
-  { name: 'Nota Perdida', sub: 'I', icon: '🎵', xp: 0 },
-  { name: 'Nota Perdida', sub: 'II', icon: '🎵', xp: 200 },
-  { name: 'Nota Perdida', sub: 'III', icon: '🎵', xp: 400 },
-  { name: 'Aprendiz', sub: 'I', icon: '🥁', xp: 700 },
-  { name: 'Aprendiz', sub: 'II', icon: '🥁', xp: 1000 },
-  { name: 'Aprendiz', sub: 'III', icon: '🥁', xp: 1400 },
-  { name: 'Músico', sub: 'I', icon: '🎸', xp: 2000 },
-  { name: 'Músico', sub: 'II', icon: '🎸', xp: 2800 },
-  { name: 'Intérprete', sub: 'I', icon: '🎺', xp: 4000 },
-  { name: 'Virtuoso', sub: 'I', icon: '🎼', xp: 6000 },
-  { name: 'Maestro', sub: '✦', icon: '👑', xp: 10000 },
+  {n:'Nota Perdida',s:'I',ic:'🎵',xp:0},
+  {n:'Nota Perdida',s:'II',ic:'🎵',xp:200},
+  {n:'Nota Perdida',s:'III',ic:'🎵',xp:400},
+  {n:'Aprendiz',s:'I',ic:'🥁',xp:700},
+  {n:'Aprendiz',s:'II',ic:'🥁',xp:1000},
+  {n:'Aprendiz',s:'III',ic:'🥁',xp:1400},
+  {n:'Músico',s:'I',ic:'🎸',xp:2000},
+  {n:'Músico',s:'II',ic:'🎸',xp:2800},
+  {n:'Intérprete',s:'I',ic:'🎺',xp:4000},
+  {n:'Virtuoso',s:'✦',ic:'🎼',xp:6000},
+  {n:'Maestro',s:'✦',ic:'👑',xp:10000},
 ];
 
 const RHYTHMS = [
-  { name: 'Clave Salsa', bpm: 120, beats: 4 },
-  { name: 'Cumbia', bpm: 110, beats: 4 },
-  { name: 'Bolero', bpm: 72, beats: 4 },
-  { name: 'Porro', bpm: 130, beats: 4 },
-  { name: 'Vallenato', bpm: 100, beats: 4 },
-  { name: 'Jazz Swing', bpm: 140, beats: 4 },
-  { name: 'Bossa Nova', bpm: 90, beats: 4 },
-  { name: 'Libre', bpm: 120, beats: 4 },
+  {n:'Clave Salsa', bpm:120, b:4},
+  {n:'Cumbia', bpm:110, b:4},
+  {n:'Bolero', bpm:72, b:4},
+  {n:'Porro', bpm:130, b:4},
+  {n:'Vallenato', bpm:100, b:4},
+  {n:'Jazz Swing', bpm:140, b:4},
+  {n:'Bossa Nova', bpm:90, b:4},
+  {n:'Libre', bpm:120, b:4},
 ];
 
 const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-const NOTE_NAMES_ES = { 'C':'Do','C#':'Do#','D':'Re','D#':'Re#','E':'Mi','F':'Fa','F#':'Fa#','G':'Sol','G#':'Sol#','A':'La','A#':'La#','B':'Si' };
+const ES = {C:'Do','C#':'Do#',D:'Re','D#':'Re#',E:'Mi',F:'Fa','F#':'Fa#',G:'Sol','G#':'Sol#',A:'La','A#':'La#',B:'Si'};
 
-const INSTRUMENTS = [
-  { name: 'Saxofón', key: 'sax' },
-  { name: 'Trompeta', key: 'trp' },
-  { name: 'Clarinete', key: 'cla' },
-  { name: 'Guitarra', key: 'gui' },
-  { name: 'Bajo', key: 'bas' },
-  { name: 'Voz', key: 'voz' },
-];
+const INSTS = ['Saxofón','Trompeta','Clarinete','Guitarra','Bajo','Voz'];
 
-// ===================== ESTADO =====================
-let state = {
-  bpm: 120,
-  playing: false,
-  beats: 4,
-  currentBeat: 0,
-  subdivision: 1,
-  currentRhythm: 'Libre',
-  xp: 847,
-  streak: 1,
-  sessionStart: null,
-  sessionActive: false,
-  sessionXP: 0,
-  instrument: 'sax',
-  tunerActive: false,
-  audioCtx: null,
-  analyser: null,
-  micStream: null,
-  metroInterval: null,
-  tapTimes: [],
-  pendulumDir: 1,
+// ── ESTADO ──
+let S = {
+  bpm:120, playing:false, beat:0, sub:1, beats:4,
+  xp:847, streak:1, inst:'Saxofón',
+  tunerOn:false, sessionOn:false, sessionStart:null, sessionXP:0,
+  audioCtx:null, analyser:null, micStream:null,
+  metroTimer:null, tapTimes:[],
 };
 
-// ===================== INIT =====================
+// ── NAVEGACIÓN ──
+function goTo(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('s-'+tab).classList.add('active');
+  document.getElementById('nav-'+tab).classList.add('active');
+}
+
+// ── INIT ──
 function init() {
-  buildRhythmGrid();
-  buildRanksTrack();
-  buildBeatLights();
-  buildInstruments();
-  updateRankDisplay();
-  updateXPBar();
+  buildBeatRow();
+  buildRhythms();
+  buildInsts();
+  buildRanks();
+  updateRank();
+  updateXP();
+
   document.getElementById('bpmSlider').addEventListener('input', e => {
-    state.bpm = parseInt(e.target.value);
-    document.getElementById('bpmDisplay').textContent = state.bpm;
-    if (state.playing) { stopMetronome(); startMetronome(); }
+    S.bpm = +e.target.value;
+    document.getElementById('bpmN').textContent = S.bpm;
+    document.getElementById('bpmSliderVal').textContent = S.bpm + ' BPM';
+    if (S.playing) { stopMetro(); startMetro(); }
   });
 }
 
-// ===================== METRÓNOMO =====================
-function buildBeatLights() {
-  const el = document.getElementById('beatLights');
+// ── METRÓNOMO ──
+function buildBeatRow() {
+  const el = document.getElementById('beatRow');
   el.innerHTML = '';
-  for (let i = 0; i < state.beats; i++) {
+  for (let i=0;i<S.beats;i++) {
     const d = document.createElement('div');
-    d.className = 'beat-light';
-    d.id = 'bl-' + i;
+    d.className='beat-dot'; d.id='bd'+i;
     el.appendChild(d);
   }
 }
 
-function toggleMetronome() {
-  if (state.playing) stopMetronome(); else startMetronome();
+function toggleMetro() {
+  S.playing ? stopMetro() : startMetro();
 }
 
-function startMetronome() {
-  if (!state.sessionActive) startSession();
-  state.playing = true;
-  state.currentBeat = 0;
-  const btn = document.getElementById('playBtn');
-  btn.textContent = '■ STOP';
-  btn.classList.add('playing');
-  scheduleBeat();
+function startMetro() {
+  if (!S.sessionOn) startSession();
+  S.playing = true; S.beat = 0;
+  const b = document.getElementById('playBtn');
+  b.textContent='■'; b.classList.add('stop');
+  tick();
 }
 
-function stopMetronome() {
-  state.playing = false;
-  clearTimeout(state.metroInterval);
-  const btn = document.getElementById('playBtn');
-  btn.textContent = '▶ PLAY';
-  btn.classList.remove('playing');
-  document.querySelectorAll('.beat-light').forEach(l => l.className = 'beat-light');
-  const dot = document.getElementById('pendulumDot');
-  dot.classList.remove('playing', 'beat', 'accent');
-  dot.style.animationDuration = '';
+function stopMetro() {
+  S.playing = false;
+  clearTimeout(S.metroTimer);
+  const b = document.getElementById('playBtn');
+  b.textContent='▶'; b.classList.remove('stop');
+  document.querySelectorAll('.beat-dot').forEach(d=>d.className='beat-dot');
+  const ball = document.getElementById('pBall');
+  ball.classList.remove('playing','on-beat');
+  ball.style.animationDuration='';
 }
 
-function scheduleBeat() {
-  if (!state.playing) return;
-  const interval = (60 / state.bpm / state.subdivision) * 1000;
-  playClick(state.currentBeat === 0);
-  updateBeatVisuals();
-  state.currentBeat = (state.currentBeat + 1) % (state.beats * state.subdivision);
-  state.metroInterval = setTimeout(scheduleBeat, interval);
+function tick() {
+  if (!S.playing) return;
+  const ms = (60/S.bpm/S.sub)*1000;
+  const isAcc = S.beat===0;
+  click(isAcc);
+  lightBeats(isAcc);
+  S.beat = (S.beat+1)%(S.beats*S.sub);
+  S.metroTimer = setTimeout(tick, ms);
 }
 
-function playClick(isAccent) {
+function click(acc) {
   try {
-    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = state.audioCtx;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = isAccent ? 1800 : 1200;
-    gain.gain.setValueAtTime(isAccent ? 0.6 : 0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.05);
-  } catch(e) {}
+    if (!S.audioCtx) S.audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const ctx = S.audioCtx;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = acc ? 1800 : 1200;
+    g.gain.setValueAtTime(acc?0.5:0.25, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.05);
+    o.start(); o.stop(ctx.currentTime+0.05);
+  } catch(e){}
 }
 
-function updateBeatVisuals() {
-  const beat = Math.floor(state.currentBeat / state.subdivision);
-  document.querySelectorAll('.beat-light').forEach((l, i) => {
-    l.className = 'beat-light';
-    if (i === beat) l.classList.add(beat === 0 ? 'accent-light' : 'active');
+function lightBeats(acc) {
+  const beat = Math.floor(S.beat/S.sub);
+  document.querySelectorAll('.beat-dot').forEach((d,i)=>{
+    d.className='beat-dot';
+    if(i===beat) d.classList.add(acc?'lit-accent':'lit');
   });
-  // Péndulo
-  const dot = document.getElementById('pendulumDot');
-  const interval = (60 / state.bpm / state.subdivision) * 1000;
-  dot.classList.add('playing');
-  dot.style.animationDuration = (interval * 2) + 'ms';
-  if (state.currentBeat === 0) {
-    dot.classList.add('accent');
-    setTimeout(() => dot.classList.remove('accent'), 80);
-  } else {
-    dot.classList.add('beat');
-    setTimeout(() => dot.classList.remove('beat'), 80);
-  }
+  const ball = document.getElementById('pBall');
+  const ms = (60/S.bpm/S.sub)*1000;
+  ball.classList.add('playing');
+  ball.style.animationDuration=(ms*2)+'ms';
+  ball.classList.add('on-beat');
+  setTimeout(()=>ball.classList.remove('on-beat'),80);
 }
 
-function setSub(val, el) {
-  state.subdivision = val;
-  state.currentBeat = 0;
-  document.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+function setSub(v,el) {
+  S.sub=v; S.beat=0;
+  document.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  if (state.playing) { stopMetronome(); startMetronome(); }
+  if(S.playing){stopMetro();startMetro();}
 }
 
-// TAP TEMPO
-function tapTempo() {
+function tap() {
   const now = Date.now();
-  state.tapTimes.push(now);
-  if (state.tapTimes.length > 6) state.tapTimes.shift();
-  if (state.tapTimes.length >= 2) {
-    const diffs = [];
-    for (let i = 1; i < state.tapTimes.length; i++) diffs.push(state.tapTimes[i] - state.tapTimes[i-1]);
-    const avg = diffs.reduce((a,b) => a+b, 0) / diffs.length;
-    const bpm = Math.round(60000 / avg);
-    if (bpm >= 40 && bpm <= 240) {
-      state.bpm = bpm;
-      document.getElementById('bpmDisplay').textContent = bpm;
-      document.getElementById('bpmSlider').value = bpm;
-      if (state.playing) { stopMetronome(); startMetronome(); }
+  S.tapTimes.push(now);
+  if(S.tapTimes.length>6) S.tapTimes.shift();
+  if(S.tapTimes.length>=2){
+    const diffs=[];
+    for(let i=1;i<S.tapTimes.length;i++) diffs.push(S.tapTimes[i]-S.tapTimes[i-1]);
+    const avg=diffs.reduce((a,b)=>a+b,0)/diffs.length;
+    const bpm=Math.round(60000/avg);
+    if(bpm>=40&&bpm<=240){
+      S.bpm=bpm;
+      document.getElementById('bpmN').textContent=bpm;
+      document.getElementById('bpmSlider').value=bpm;
+      document.getElementById('bpmSliderVal').textContent=bpm+' BPM';
+      if(S.playing){stopMetro();startMetro();}
+      notif('TAP · '+bpm+' BPM');
     }
   }
-  showNotif('TAP · ' + state.bpm + ' BPM');
 }
 
-// RITMOS
-function buildRhythmGrid() {
+function buildRhythms() {
   const el = document.getElementById('rhythmGrid');
-  RHYTHMS.forEach(r => {
-    const btn = document.createElement('button');
-    btn.className = 'rhythm-btn' + (r.name === 'Libre' ? ' active' : '');
-    btn.innerHTML = r.name + '<span class="r-bpm">' + r.bpm + ' BPM</span>';
-    btn.onclick = () => {
-      document.querySelectorAll('.rhythm-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      state.bpm = r.bpm;
-      state.beats = r.beats;
-      state.currentRhythm = r.name;
-      document.getElementById('bpmDisplay').textContent = r.bpm;
-      document.getElementById('bpmSlider').value = r.bpm;
-      document.getElementById('rhythmName').textContent = r.name;
-      buildBeatLights();
-      if (state.playing) { stopMetronome(); startMetronome(); }
+  RHYTHMS.forEach(r=>{
+    const b=document.createElement('button');
+    b.className='rbtn'+(r.n==='Libre'?' active':'');
+    b.innerHTML=r.n+'<span>'+r.bpm+' BPM</span>';
+    b.onclick=()=>{
+      document.querySelectorAll('.rbtn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      S.bpm=r.bpm; S.beats=r.b; S.beat=0;
+      document.getElementById('bpmN').textContent=r.bpm;
+      document.getElementById('bpmSlider').value=r.bpm;
+      document.getElementById('bpmSliderVal').textContent=r.bpm+' BPM';
+      document.getElementById('rName').textContent=r.n;
+      buildBeatRow();
+      if(S.playing){stopMetro();startMetro();}
     };
-    el.appendChild(btn);
+    el.appendChild(b);
   });
 }
 
-// ===================== AFINADOR =====================
-function buildInstruments() {
+// ── AFINADOR ──
+function buildInsts() {
   const el = document.getElementById('instRow');
-  INSTRUMENTS.forEach(inst => {
-    const btn = document.createElement('button');
-    btn.className = 'inst-btn' + (inst.key === 'sax' ? ' active' : '');
-    btn.textContent = inst.name;
-    btn.onclick = () => {
-      document.querySelectorAll('.inst-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      state.instrument = inst.key;
-      showNotif('Instrumento: ' + inst.name);
+  INSTS.forEach(i=>{
+    const b=document.createElement('button');
+    b.className='inst-btn'+(i==='Saxofón'?' active':'');
+    b.textContent=i;
+    b.onclick=()=>{
+      document.querySelectorAll('.inst-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      S.inst=i;
+      notif('🎵 '+i);
     };
-    el.appendChild(btn);
+    el.appendChild(b);
   });
 }
 
 async function toggleTuner() {
-  if (state.tunerActive) {
-    stopTuner();
-  } else {
-    await startTuner();
-  }
+  S.tunerOn ? stopTuner() : await startTuner();
 }
 
 async function startTuner() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    state.micStream = stream;
-    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = state.audioCtx;
-    const source = ctx.createMediaStreamSource(stream);
-    state.analyser = ctx.createAnalyser();
-    state.analyser.fftSize = 4096;
-    source.connect(state.analyser);
-    state.tunerActive = true;
-    document.getElementById('micBtn').textContent = '🔴 DESACTIVAR';
-    document.getElementById('tunerStatus').className = 'tuner-status status-idle';
-    document.getElementById('tunerStatus').textContent = 'Escuchando...';
-    updateTuner();
-  } catch(e) {
-    showNotif('Micrófono no disponible');
-  }
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    S.micStream=stream;
+    if(!S.audioCtx) S.audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const src=S.audioCtx.createMediaStreamSource(stream);
+    S.analyser=S.audioCtx.createAnalyser();
+    S.analyser.fftSize=4096;
+    src.connect(S.analyser);
+    S.tunerOn=true;
+    document.getElementById('micBtn').textContent='🔴 DESACTIVAR MICRÓFONO';
+    document.getElementById('micBtn').classList.add('on');
+    setStatus('s-idle','Escuchando...');
+    tunerLoop();
+  } catch(e){ notif('⚠ Micrófono no disponible'); }
 }
 
 function stopTuner() {
-  state.tunerActive = false;
-  if (state.micStream) { state.micStream.getTracks().forEach(t => t.stop()); state.micStream = null; }
-  document.getElementById('micBtn').textContent = '🎙 ACTIVAR MIC';
-  document.getElementById('noteDisplay').textContent = '—';
-  document.getElementById('freqDisplay').textContent = 'Micrófono inactivo';
-  document.getElementById('tunerNeedle').style.left = '50%';
-  document.getElementById('tunerStatus').className = 'tuner-status status-idle';
-  document.getElementById('tunerStatus').textContent = 'Micrófono inactivo';
+  S.tunerOn=false;
+  if(S.micStream){S.micStream.getTracks().forEach(t=>t.stop());S.micStream=null;}
+  document.getElementById('micBtn').textContent='🎙 ACTIVAR MICRÓFONO';
+  document.getElementById('micBtn').classList.remove('on');
+  document.getElementById('noteD').textContent='—';
+  document.getElementById('noteD').style.color='var(--muted)';
+  document.getElementById('hzD').textContent='Micrófono inactivo';
+  document.getElementById('needle').style.left='50%';
+  setStatus('s-idle','Micrófono inactivo');
 }
 
-function updateTuner() {
-  if (!state.tunerActive) return;
-  const buf = new Float32Array(state.analyser.fftSize);
-  state.analyser.getFloatTimeDomainData(buf);
-  const freq = autoCorrelate(buf, state.audioCtx.sampleRate);
-  if (freq > 50) {
-    const noteNum = 12 * (Math.log2(freq / 440)) + 69;
-    const roundedNote = Math.round(noteNum);
-    const cents = (noteNum - roundedNote) * 100;
-    const noteName = NOTES[((roundedNote % 12) + 12) % 12];
-    const octave = Math.floor(roundedNote / 12) - 1;
-    const noteES = NOTE_NAMES_ES[noteName];
-    document.getElementById('noteDisplay').textContent = noteES + octave;
-    document.getElementById('freqDisplay').textContent = freq.toFixed(1) + ' Hz';
-    const needlePos = 50 + (cents / 50) * 40;
-    const needle = document.getElementById('tunerNeedle');
-    needle.style.left = Math.max(5, Math.min(95, needlePos)) + '%';
-    const absCents = Math.abs(cents);
-    const statusEl = document.getElementById('tunerStatus');
-    const noteEl = document.getElementById('noteDisplay');
-    if (absCents < 8) {
-      needle.style.background = '#1D9E75';
-      statusEl.className = 'tuner-status status-in';
-      statusEl.textContent = '✓ AFINADO';
-      noteEl.style.color = '#1D9E75';
-    } else if (cents < 0) {
-      needle.style.background = '#E24B4A';
-      statusEl.className = 'tuner-status status-low';
-      statusEl.textContent = '▲ SUBIR (' + Math.abs(Math.round(cents)) + ' cents)';
-      noteEl.style.color = '#E24B4A';
+function tunerLoop() {
+  if(!S.tunerOn) return;
+  const buf=new Float32Array(S.analyser.fftSize);
+  S.analyser.getFloatTimeDomainData(buf);
+  const freq=autocorr(buf,S.audioCtx.sampleRate);
+  const noteEl=document.getElementById('noteD');
+  if(freq>50){
+    const nn=12*(Math.log2(freq/440))+69;
+    const rn=Math.round(nn);
+    const cents=(nn-rn)*100;
+    const name=NOTES[((rn%12)+12)%12];
+    const oct=Math.floor(rn/12)-1;
+    noteEl.textContent=(ES[name]||name)+oct;
+    document.getElementById('hzD').textContent=freq.toFixed(1)+' Hz';
+    const pos=50+(cents/50)*40;
+    const needle=document.getElementById('needle');
+    needle.style.left=Math.max(5,Math.min(95,pos))+'%';
+    if(Math.abs(cents)<8){
+      needle.style.background='var(--green)';
+      noteEl.style.color='var(--green)';
+      setStatus('s-in','✓ AFINADO');
+    } else if(cents<0){
+      needle.style.background='var(--red)';
+      noteEl.style.color='var(--red)';
+      setStatus('s-low','▲ SUBIR ('+Math.abs(Math.round(cents))+' cents)');
     } else {
-      needle.style.background = '#E24B4A';
-      statusEl.className = 'tuner-status status-high';
-      statusEl.textContent = '▼ BAJAR (' + Math.round(cents) + ' cents)';
-      noteEl.style.color = '#E24B4A';
+      needle.style.background='var(--red)';
+      noteEl.style.color='var(--red)';
+      setStatus('s-high','▼ BAJAR ('+Math.round(cents)+' cents)');
     }
   } else {
-    document.getElementById('noteDisplay').textContent = '—';
-    document.getElementById('noteDisplay').style.color = 'var(--purple-400)';
-    document.getElementById('freqDisplay').textContent = 'Esperando señal...';
+    noteEl.textContent='—';
+    noteEl.style.color='var(--muted)';
+    document.getElementById('hzD').textContent='Esperando señal...';
   }
-  requestAnimationFrame(updateTuner);
+  requestAnimationFrame(tunerLoop);
 }
 
-function autoCorrelate(buf, sampleRate) {
-  let SIZE = buf.length;
-  let rms = 0;
-  for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
-  rms = Math.sqrt(rms / SIZE);
-  if (rms < 0.01) return -1;
-  let r1 = 0, r2 = SIZE - 1;
-  for (let i = 0; i < SIZE / 2; i++) { if (Math.abs(buf[i]) < 0.2) { r1 = i; break; } }
-  for (let i = 1; i < SIZE / 2; i++) { if (Math.abs(buf[SIZE - i]) < 0.2) { r2 = SIZE - i; break; } }
-  buf = buf.slice(r1, r2);
-  SIZE = buf.length;
-  const c = new Array(SIZE).fill(0);
-  for (let i = 0; i < SIZE; i++) for (let j = 0; j < SIZE - i; j++) c[i] += buf[j] * buf[j + i];
-  let d = 0;
-  while (c[d] > c[d + 1]) d++;
-  let maxval = -1, maxpos = -1;
-  for (let i = d; i < SIZE; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
-  let T0 = maxpos;
-  const x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
-  const a = (x1 + x3 - 2 * x2) / 2;
-  const b = (x3 - x1) / 2;
-  if (a) T0 = T0 - b / (2 * a);
-  return sampleRate / T0;
+function setStatus(cls,txt){
+  const el=document.getElementById('tStatus');
+  el.className='tuner-status '+cls;
+  el.textContent=txt;
 }
 
-// ===================== SESIÓN =====================
-function startSession() {
-  state.sessionActive = true;
-  state.sessionStart = Date.now();
-  state.sessionXP = 0;
-  updateTimer();
+function autocorr(buf,sr){
+  let SIZE=buf.length,rms=0;
+  for(let i=0;i<SIZE;i++) rms+=buf[i]*buf[i];
+  rms=Math.sqrt(rms/SIZE);
+  if(rms<0.01) return -1;
+  let r1=0,r2=SIZE-1;
+  for(let i=0;i<SIZE/2;i++){if(Math.abs(buf[i])<0.2){r1=i;break;}}
+  for(let i=1;i<SIZE/2;i++){if(Math.abs(buf[SIZE-i])<0.2){r2=SIZE-i;break;}}
+  buf=buf.slice(r1,r2); SIZE=buf.length;
+  const c=new Array(SIZE).fill(0);
+  for(let i=0;i<SIZE;i++) for(let j=0;j<SIZE-i;j++) c[i]+=buf[j]*buf[j+i];
+  let d=0; while(c[d]>c[d+1]) d++;
+  let mv=-1,mp=-1;
+  for(let i=d;i<SIZE;i++){if(c[i]>mv){mv=c[i];mp=i;}}
+  let T=mp;
+  const x1=c[T-1],x2=c[T],x3=c[T+1];
+  const a=(x1+x3-2*x2)/2,b=(x3-x1)/2;
+  if(a) T=T-b/(2*a);
+  return sr/T;
 }
 
-function updateTimer() {
-  if (!state.sessionActive) return;
-  const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
-  const mins = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
-  document.getElementById('timerDisplay').textContent = String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
-  const xpThisSession = Math.floor(elapsed / 30) * 5;
-  document.getElementById('xpEarned').textContent = xpThisSession;
-  document.getElementById('minPracticed').textContent = mins;
-  setTimeout(updateTimer, 1000);
+// ── SESIÓN ──
+function startSession(){
+  S.sessionOn=true; S.sessionStart=Date.now(); S.sessionXP=0;
+  tickTimer();
 }
 
-function endSession() {
-  if (!state.sessionActive) { showNotif('Inicia el metrónomo primero'); return; }
-  const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
-  const xpGained = Math.floor(elapsed / 30) * 5;
-  state.xp += xpGained;
-  state.sessionActive = false;
-  stopMetronome();
-  stopTuner();
-  updateRankDisplay();
-  updateXPBar();
-  showNotif('¡Sesión terminada! +' + xpGained + ' XP ganados 🏅');
+function tickTimer(){
+  if(!S.sessionOn) return;
+  const e=Math.floor((Date.now()-S.sessionStart)/1000);
+  const m=Math.floor(e/60),s=e%60;
+  document.getElementById('timerD').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const xp=Math.floor(e/30)*5;
+  document.getElementById('xpD').textContent=xp;
+  document.getElementById('minD').textContent=m;
+  setTimeout(tickTimer,1000);
 }
 
-// ===================== RANGOS =====================
-function getCurrentRank() {
-  let rank = RANKS[0];
-  for (let i = RANKS.length - 1; i >= 0; i--) {
-    if (state.xp >= RANKS[i].xp) { rank = RANKS[i]; break; }
-  }
-  return rank;
+function endSession(){
+  if(!S.sessionOn){notif('¡Inicia el metrónomo primero!');return;}
+  const e=Math.floor((Date.now()-S.sessionStart)/1000);
+  const xp=Math.floor(e/30)*5;
+  S.xp+=xp; S.sessionOn=false;
+  stopMetro(); stopTuner();
+  updateRank(); updateXP();
+  notif('🏅 +'+xp+' XP ganados. ¡Hazta Cuándo!');
 }
 
-function buildRanksTrack() {
-  const el = document.getElementById('ranksTrack');
-  RANKS.forEach((r, i) => {
-    const div = document.createElement('div');
-    div.className = 'rank-item';
-    div.id = 'rank-' + i;
-    div.innerHTML = '<div class="rank-item-icon">' + r.icon + '</div><div class="rank-item-name">' + r.name + '<br>' + r.sub + '</div>';
-    el.appendChild(div);
+// ── RANGOS ──
+function buildRanks(){
+  const el=document.getElementById('ranksRow');
+  RANKS.forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className='rank-card'; d.id='rc'+i;
+    d.innerHTML='<div class="rank-card-icon">'+r.ic+'</div><div class="rank-card-name">'+r.n+'<br>'+r.s+'</div>';
+    el.appendChild(d);
   });
 }
 
-function updateRankDisplay() {
-  let currentIdx = 0;
-  for (let i = RANKS.length - 1; i >= 0; i--) {
-    if (state.xp >= RANKS[i].xp) { currentIdx = i; break; }
-  }
-  RANKS.forEach((r, i) => {
-    const el = document.getElementById('rank-' + i);
-    el.className = 'rank-item';
-    if (i < currentIdx) el.classList.add('achieved');
-    if (i === currentIdx) el.classList.add('current');
+function updateRank(){
+  let ci=0;
+  for(let i=RANKS.length-1;i>=0;i--) if(S.xp>=RANKS[i].xp){ci=i;break;}
+  RANKS.forEach((_,i)=>{
+    const el=document.getElementById('rc'+i);
+    el.className='rank-card';
+    if(i<ci) el.classList.add('done');
+    if(i===ci) el.classList.add('now');
   });
-  const cur = RANKS[currentIdx];
-  const next = RANKS[Math.min(currentIdx + 1, RANKS.length - 1)];
-  document.getElementById('rankName').textContent = cur.name.toUpperCase() + ' ' + cur.sub;
-  document.getElementById('rankPts').textContent = state.xp + ' / ' + next.xp + ' XP';
-  document.getElementById('rankIcon').textContent = cur.icon;
+  const cur=RANKS[ci];
+  document.getElementById('hIcon').textContent=cur.ic;
+  document.getElementById('hRank').textContent=cur.n+' '+cur.s;
 }
 
-function updateXPBar() {
-  let currentIdx = 0;
-  for (let i = RANKS.length - 1; i >= 0; i--) {
-    if (state.xp >= RANKS[i].xp) { currentIdx = i; break; }
-  }
-  const cur = RANKS[currentIdx];
-  const next = RANKS[Math.min(currentIdx + 1, RANKS.length - 1)];
-  const pct = Math.min(100, ((state.xp - cur.xp) / (next.xp - cur.xp)) * 100);
-  document.getElementById('xpFill').style.width = pct + '%';
-  document.getElementById('xpLabel').textContent = state.xp + ' / ' + next.xp + ' XP';
+function updateXP(){
+  let ci=0;
+  for(let i=RANKS.length-1;i>=0;i--) if(S.xp>=RANKS[i].xp){ci=i;break;}
+  const cur=RANKS[ci];
+  const nxt=RANKS[Math.min(ci+1,RANKS.length-1)];
+  const pct=Math.min(100,((S.xp-cur.xp)/(nxt.xp-cur.xp))*100);
+  document.getElementById('xpFill').style.width=pct+'%';
+  document.getElementById('xpProgress').textContent=S.xp+' / '+nxt.xp+' XP';
+  document.getElementById('xpCurRank').textContent=cur.n+' '+cur.s;
+  document.getElementById('xpNextRank').textContent=nxt.n+' '+nxt.s;
 }
 
-// ===================== NOTIF =====================
-function showNotif(msg) {
-  const el = document.getElementById('notif');
-  el.textContent = msg;
-  el.style.opacity = '1';
-  setTimeout(() => el.style.opacity = '0', 2000);
+// ── NOTIF ──
+function notif(msg){
+  const el=document.getElementById('notif');
+  el.textContent=msg; el.style.opacity='1';
+  setTimeout(()=>el.style.opacity='0',2500);
 }
 
-// ===================== ARRANCAR =====================
 init();
 </script>
 </body>
